@@ -26,9 +26,9 @@ they are the bar:
   general arrangement with a section view, a fluid and electrical schematic
   with station tags, and a computed chart. A fresh agent made it from this
   skill alone in six render passes.
-- `assets/examples/pi-durable.png` (+ `.html`): a real software system. It
-  explains durable commits and interrupted-tool recovery; the accompanying
-  `pi-durable-source-notes.md` pins the source and records simplifications.
+- `assets/examples/pi-durable.png` (+ `.html`): a ten-page software handbook
+  covering APIs, task states, replay and operations. `pi-durable-overview.png`
+  shows all sheets; `pi-durable-source-notes.md` pins sources and assumptions.
 
 ## Resource paths
 

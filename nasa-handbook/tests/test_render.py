@@ -179,6 +179,23 @@ class RendererTests(unittest.TestCase):
                 script = example.read_text().rsplit('<script>', 1)[1].split('</script>', 1)[0]
                 self.assertEqual(script, FIT)
 
+    def test_shipped_pi_durable_ten_page_report(self):
+        (self.root / 'fonts').symlink_to(SKILL / 'assets' / 'fonts', target_is_directory=True)
+        _, source = self.run_html((SKILL / 'assets/examples/pi-durable.html').read_text(),
+                                  name='examples/pi-durable.html')
+        result = subprocess.run([sys.executable, str(SKILL / 'scripts/check.py'),
+                                 str(source.with_suffix('.pdf')), '--pages', '10', '--no-tiles'],
+                                capture_output=True, text=True, timeout=45)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse(source.with_suffix('.png').exists())
+        previews = set(source.parent.glob('pi-durable-*.png'))
+        self.assertEqual(previews, {source.with_name(f'pi-durable-{n}.png') for n in range(1, 11)})
+        for preview in previews:
+            with self.subTest(preview=preview.name):
+                width, height, _ = png_info(preview)
+                self.assertAlmostEqual(width, 210 / 25.4 * 192, delta=2)
+                self.assertAlmostEqual(height, 297 / 25.4 * 192, delta=2)
+
     def test_template_and_original_examples(self):
         (self.root / 'fonts').symlink_to(SKILL / 'assets' / 'fonts', target_is_directory=True)
         for name in ('template.html', 'examples/portal-gun-device.html', 'examples/espresso-fluid-system.html'):
